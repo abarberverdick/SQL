@@ -1,0 +1,18 @@
+-- Create a store database 
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, name TEXT, quantity_in_stock INTEGER, quantity_sold INTEGER, price INTEGER);
+INSERT INTO store VALUES (1, "t-shirts", 5, 3, 5.00);
+INSERT INTO store VALUES (2, "pants", 5, 2, 15.00);
+INSERT INTO store VALUES (3, "jeans", 10, 3, 25.00);
+INSERT INTO store VALUES (4, "jackets", 3, 1, 45.99);
+INSERT INTO store VALUES (5, "tank tops", 5, 2, 5.00);
+INSERT INTO store VALUES (6, "dresses", 8, 4, 17.99);
+
+-- display the store database ordered by price 
+SELECT * FROM store ORDER BY price;
+
+-- what was the clothing item that sold the most? 
+SELECT name, MAX (quantity_sold) FROM store;
+
+-- what was the average amount of quantity sold? 
+SELECT AVG(quantity_sold) FROM store;
