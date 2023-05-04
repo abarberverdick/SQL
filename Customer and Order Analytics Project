@@ -1,0 +1,51 @@
+-- Below are questions to be answered using SQLiteStudio 
+
+#1. How many orders were placed in January?
+
+SELECT COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE length(oderID) = 6
+AND orderID <> "Order Id"
+
+#2. How many of those were for an iPhone?
+
+SELECT COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> "Order Id"
+AND product = "iPhone"
+
+#3. Select the customer account numbers for all of the orders placed in February.
+
+SELECT distinct acctnum
+FROM BIT_DB.customers cust
+
+#4. Which product was the cheapest one sold in January, and at what price? 
+
+SELECT MIN(price), product
+FROM BIT_DB.JanSales
+
+#5. What is the total revenue for each product sold in January? 
+
+SELECT SUM(quantity)*price AS revenue
+, product
+FROM BIT_DB.JanSales
+GROUP BY product 
+
+#6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+
+SELECT SUM(quantity), product, 
+SUM(quantity)* price as revenue
+FROM BIT_DB.FebSales
+WHERE location = "548 Lincoln St, Seattle, WA 98101"
+GROUP BY product
+
+#7. How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+
+SELECT COUNT (distinct cust.acctnum) AS num_of_customers, AVG(quantity * price) AS avg_amount_spent
+FROM BIT_DB.FebSales
+LEFT JOIN BIT_DB.customers cust
+ON FebSales.orderID = cust.order_id
+WHERE FebSales.Quantity>2
+AND length(orderID) = 6
+AND orderID <> "Order Id"
