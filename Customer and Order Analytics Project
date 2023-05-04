@@ -1,4 +1,5 @@
--- Below are questions to be answered using SQLiteStudio 
+-- Below are questions to be answered using SQLiteStudio. Data from https://www.dropbox.com/s/cvsasmtr8syq2c2/BIT_DB?dl=0
+
 
 #1. How many orders were placed in January?
 
@@ -49,3 +50,48 @@ ON FebSales.orderID = cust.order_id
 WHERE FebSales.Quantity>2
 AND length(orderID) = 6
 AND orderID <> "Order Id"
+
+#8. List all of the products sold in Los Angeles in February, and include how many of each sold.
+SELECT product, SUM(Quantity)
+FROM BIT_DB.FebSales
+WHERE location like "%Los Angeles%" 
+GROUP BY product 
+
+#9. Which locations in New York received at least 3 orders in Jannuary, and how many orderes did they each receive? 
+SELECT location, COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE location like "%New York%"
+AND length(orderID) = 6
+AND orderid <> "Order Id"
+GROUP BY location
+HAVING COUNT(orderID) >=3
+
+#10. How many of each headphone was sold in February? 
+SELECT product, SUM(quantity) as quantity
+FROM BIT_DB.FebSales
+WHERE product like "%headphone%"
+GROUP BY product 
+
+#11. What was the average amount spent per account in February? 
+SELECT sum(quantity*price)/count(cust.acctnum) as avg_amount_spent
+FROM BIT_DB.FebSales Feb
+LEFT JOIN BIT_DB.customers cust
+ON Feb.orderid=cust.order_id
+WHERE length(orderid) = 6
+AND orderid <> "Order Id"
+
+#12. What was the average quantity of products purchased per account in February? 
+SELECT sum(quantity)/count(cust.acctnum) as avg_products_purchased 
+FROM BIT_DB.FebSales Feb
+LEFT JOIN BIT_DB.customers cust
+ON Feb.orderid=cust.order_id
+WHERE length(orderid) = 6
+AND orderid <> "Order Id" 
+
+#13. Which product brought in the most revenue in January and how much revenue did it bring in total?
+SELECT product, 
+sum(quantity*price) as total_revenue
+FROM BIT_DB.JanSales
+GROUP BY product
+ORDER BY sum(quantity*price) DESC
+LIMIT 1
