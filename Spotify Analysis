@@ -1,0 +1,84 @@
+# For this project, I used Spotify data from Kaggle (https://www.kaggle.com/datasets/equinxx/spotify-top-50-songs-in-2021?select=spotify_top50_2021.csv).
+# Then, I created a table to insert data into from a CSV file. 
+# Lastly, I performed analytics on the data using SQL. 
+
+# Creating the table:
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL )
+
+# Then I inserted the Spotify data from a CSV file in to the created table. 
+
+
+# Next, I explored the data using the following SQL.
+
+
+# First, I determined the top 10 artists by popularity.
+
+SELECT artist_name, popularity
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10
+
+# Next, I determined the average energy, danceability, and loudness for the top 10 artists. 
+
+SELECT artist_name, 
+popularity,
+avg(danceability),
+avg(loudness),
+avg(energy)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY popularity DESC
+LIMIT 10
+
+# Determined which artist had the longest song. 
+
+SELECT artist_name, track_name, MAX(duration_ms)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY duration_ms DESC 
+
+# Determined the top 5 danceable songs. 
+
+SELECT artist_name, track_name, MAX(danceability)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY danceability DESC 
+LIMIT 5
+
+# Determined which artist had the most songs on the playlist. 
+
+SELECT artist_name, COUNT(*)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY COUNT(*) DESC
+
+# How many tracks have a featured artist? 
+
+SELECT COUNT(*)
+FROM BIT_DB.Spotifydata
+WHERE track_name LIKE "%feat.%" OR "%with%" OR "%ft.%" 
+
+# Calculate the percent the featured tracks make up out of the total playlist. 
+
+SELECT (COUNT(*)* 100/ (SELECT COUNT (*) FROM BIT_DB.Spotifydata)) as Percentage
+FROM BIT_DB.Spotifydata
+WHERE track_name LIKE "%feat.%" OR "%ft.%" OR "%with%"
