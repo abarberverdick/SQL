@@ -1,0 +1,51 @@
+# This project is the final SQL project of the course "Breaking Into Tech". This data represents a digital media store. 
+# Data provided by Breaking Into Tech. 
+
+1. Show customers NOT in the USA.
+
+SELECT FirstName, LastName, Country 
+FROM chinook.customers
+WHERE Country <> "USA" 
+
+2. Find Invoices of customers in Brazil. Table should include customer's full name, Invoice ID, Date of Invoice, and Billing Country. 
+
+SELECT i.invoiceid, c.FirstName, c.LastName, i.BillingCountry, i.InvoiceDate
+FROM chinook.invoices i
+JOIN chinook.customers c
+ON i.invoiceid = c.customerid
+WHERE BillingCountry = "Brazil"
+GROUP BY InvoiceDate
+
+3. Show Invoice total, customer name, country, and sales agent name for all invoices and customers. 
+
+SELECT e.FirstName, e.LastName, e.title, c.FirstName, c.LastName, c.Country, i.Total
+FROM chinook.employees e
+JOIN chinook.customers c
+ON c.SupportRepID = e.EmployeeID
+JOIN chinook.invoices i
+ON i.CustomerID = c.CustomerID
+
+4. Show total sales from the year 2009.
+
+SELECT SUM(total)
+FROM chinook.invoices
+WHERE InvoiceDate BETWEEN "2009-01-01" AND "2009-12-31"
+
+5. Show total sales made by each sales agent. 
+
+SELECT e.FirstName, e.LastName, e.Title, ROUND(SUM(i.total), 2) as "Total Sales"
+FROM chinook.employees e
+JOIN chinook.customers c ON c.SupportRepID = e.employeeID
+JOIN chinook.invoices i ON i.customerID = c.SupportRepID
+GROUP BY e.FirstName
+
+6. Show all tracks, album names, media type, and genre in the database. 
+
+SELECT t.Name AS "Track Name",
+a.Title AS "Album Name",
+m.Name AS "Media Type",
+g.Name AS "Genre"
+FROM chinook.tracks t
+JOIN chinook.Albums a ON a.albumid = t.albumid
+JOIN chinook.media_types m ON m.mediaTypeId = t.MediaTypeId
+JOIN chinook.genres g ON g.Genreid = t.Genreid
