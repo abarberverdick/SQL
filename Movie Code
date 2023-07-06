@@ -42,7 +42,7 @@ of number of payments processed. How many payments did each staff member handle 
 
 SELECT staff_id, COUNT(amount) 
 FROM payment
-GROUP BY staff_id 
+GROUP BY staff_id;
 
 8. Corporate HQ is conducting a study on the relationship between replacement cost and movie MPAA rating. What is the average replacement
 cost per MPAA rating?
@@ -50,7 +50,7 @@ cost per MPAA rating?
 SELECT rating, 
 ROUND(AVG(replacement_cost),2)
 FROM film
-GROUP BY rating
+GROUP BY rating;
 
 9. We are running a promotion to reward our top 5 customers with coupons. What are the customer ids of the top 5 customers by total spend?
 
@@ -58,7 +58,7 @@ SELECT customer_id, SUM(amount)
 FROM payment
 GROUP BY customer_id
 ORDER BY SUM(amount) DESC
-LIMIT 5
+LIMIT 5;
 
 10. We are launching a platinum service for our most loyal customers. We will assign platinum status to customers that have 40 or more
 transaction payments. What customer ids are elgible for platinum status?
@@ -66,7 +66,7 @@ transaction payments. What customer ids are elgible for platinum status?
 SELECT customer_id, COUNT(payment_id)
 FROM payment
 GROUP BY customer_id
-HAVING COUNT(payment_id) >= 40
+HAVING COUNT(payment_id) >= 40;
 
 11. What are the customer ids of customers who have spent more than $100 in payment transactions with our staff_id member 2?
 
@@ -74,4 +74,13 @@ SELECT customer_id, SUM(amount)
 FROM payment
 WHERE staff_id = 2
 GROUP BY customer_id
-HAVING SUM(amount) > 100
+HAVING SUM(amount) > 100;
+
+12. What customer has the highest customer id, whose name starts with an 'E', and has an address ID lower than 500?
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE 'E%' 
+AND address_id < 500
+ORDER BY customer_id DESC
+LIMIT 1;
