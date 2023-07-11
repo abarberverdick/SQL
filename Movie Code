@@ -3,7 +3,7 @@
 
 Challenge 1: 
 
-1. How many payment transactoins were greater than $5.00?
+1. How many payment transactions were greater than $5.00?
 
 SELECT COUNT(*) 
 FROM payment
@@ -15,36 +15,26 @@ SELECT COUNT(*)
 FROM actor
 WHERE first_name LIKE 'P%'; 
 
-3. How many unique districts are our customers from? 
-
-SELECT COUNT(DISTINCT(district)) 
-FROM address;
-
-4. Retrieve the list of names for those distinct districts from the previous question.
-
-SELECT DISTINCT(district)
-FROM address; 
-
-5. How many films have a rating of R and a replacement cost between $5 and $15? 
+3. How many films have a rating of R and a replacement cost between $5 and $15? 
 
 SELECT COUNT(*) 
 FROM film
 WHERE rating = 'R' AND replacement_cost BETWEEN 5 AND 15; 
 
-6. How many films have the word Truman somewhere in the title?
+4. How many films have the word Truman somewhere in the title?
 
 SELECT COUNT(*) 
 FROM film 
 WHERE title LIKE '%Truman%';
 
-7. We have two staff members with staff ids 1 and 2. We want to give a bonus to the staff member that handled the most payments, in terms 
+5. We have two staff members with staff ids 1 and 2. We want to give a bonus to the staff member that handled the most payments, in terms 
 of number of payments processed. How many payments did each staff member handle and who gets the bonus?
 
 SELECT staff_id, COUNT(amount) 
 FROM payment
 GROUP BY staff_id;
 
-8. Corporate HQ is conducting a study on the relationship between replacement cost and movie MPAA rating. What is the average replacement
+6. Corporate HQ is conducting a study on the relationship between replacement cost and movie MPAA rating. What is the average replacement
 cost per MPAA rating?
 
 SELECT rating, 
@@ -52,7 +42,7 @@ ROUND(AVG(replacement_cost),2)
 FROM film
 GROUP BY rating;
 
-9. We are running a promotion to reward our top 5 customers with coupons. What are the customer ids of the top 5 customers by total spend?
+7. We are running a promotion to reward our top 5 customers with coupons. What are the customer ids of the top 5 customers by total spend?
 
 SELECT customer_id, SUM(amount)
 FROM payment
@@ -60,7 +50,7 @@ GROUP BY customer_id
 ORDER BY SUM(amount) DESC
 LIMIT 5;
 
-10. We are launching a platinum service for our most loyal customers. We will assign platinum status to customers that have 40 or more
+8. We are launching a platinum service for our most loyal customers. We will assign platinum status to customers that have 40 or more
 transaction payments. What customer ids are elgible for platinum status?
 
 SELECT customer_id, COUNT(payment_id)
@@ -68,7 +58,7 @@ FROM payment
 GROUP BY customer_id
 HAVING COUNT(payment_id) >= 40;
 
-11. What are the customer ids of customers who have spent more than $100 in payment transactions with our staff_id member 2?
+9. What are the customer ids of customers who have spent more than $100 in payment transactions with our staff_id member 2?
 
 SELECT customer_id, SUM(amount)
 FROM payment
@@ -76,7 +66,7 @@ WHERE staff_id = 2
 GROUP BY customer_id
 HAVING SUM(amount) > 100;
 
-12. What customer has the highest customer id, whose name starts with an 'E', and has an address ID lower than 500?
+10. What customer has the highest customer id, whose name starts with an 'E', and has an address ID lower than 500?
 
 SELECT first_name, last_name
 FROM customer
@@ -84,3 +74,23 @@ WHERE first_name LIKE 'E%'
 AND address_id < 500
 ORDER BY customer_id DESC
 LIMIT 1;
+
+11. California sales tax laws have changed and we need to alert our customers to this through email.
+What are the emails of the customers who live in California?
+
+SELECT district, email
+FROM address
+LEFT JOIN customer
+ON address.address_id = customer.address_id
+WHERE district = 'California';
+
+12. A customer walks in and is a huge fan of the actor "Nick Wahlberg" and wants to know what movies he is in.
+Find a list of all the movies "Nick Wahlberg" has been in.
+
+SELECT first_name, last_name, title
+FROM actor
+INNER JOIN film_actor
+ON actor.actor_id = film_actor.actor_id
+INNER JOIN film
+ON film_actor.film_id = film.film_id
+WHERE first_name = 'Nick' AND last_name = 'Walhberg';
