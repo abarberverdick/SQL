@@ -1,8 +1,8 @@
 ## These are SQL test assessment questions and answers from a SQL Udemy course taught by Jose Portilla.
 
 ## The data involved in the questions is from an exercise database involving two schemas; public and cd. The following questions will be from the cd schema. 
-## Cd schema has three tables; facilities, members, and bookings. Facilites table contains the following: facility id, name, member cost, guest cost, initial outlay, and 
-## monthly maintanence. 
+## Cd schema has three tables; facilities, members, and bookings. 
+## Facilites table contains facility id, name, member cost, guest cost, initial outlay, and monthly maintanence. 
 ## Bookings table contains booking id, facility id, member id, start time and slots. 
 ## Members table contains member id, surname, first name, address, zipcode, telephone number, recommended by, and join date. 
 
@@ -80,4 +80,22 @@ GROUP BY facid
 HAVING SUM(slots) > 1000
 ORDER BY facid; 
 
-** still need to add 2 more questoins **
+13. How can you produce a list of the start times for bookings for tennis courts, for the date '2012-09-21'? Return a list of start time and facility name 
+pairings, ordered by the time.
+
+SELECT cb.starttimes AS Start, 
+cf.name AS Name
+FROM cd.bookings AS cb
+INNER JOIN cd.facilities AS cf
+ON cb.facid = cf.facid
+WHERE cf.facid IN (0,1)
+AND cb.starttime >= '2012-09-21'
+ORDER BY cb.starttime;
+
+14. How can you produce a list of the start times for bookings by members named 'David Farrell'?
+
+SELECT cb.starttime, cm.firstname, cm.surname
+FROM cd.members AS cm
+INNER JOIN cd.bookings AS cb
+ON cm.memid = cb.memid
+WHERE cm.firstname = 'David' AND cm.surname = 'Farrell';
