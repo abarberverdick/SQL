@@ -1,0 +1,33 @@
+## Analysis of Walmart Sales using Google Sheets, PostgreSQL, and Tableau. Data is from Kaggle. 
+
+1. I first converted all dates into a text format since not all dates were represented in a date format. 
+  =TEXT(cell #, "dd-mm-yyyy")
+
+2. Converted all text dates back into a date format with the format "mm-dd-yyyy"
+  =DATE(RIGHT(cell#,2), MID(cell#,4,2), LEFT(cell#,2))
+
+3. Checked for NULL cells and replaced with appropriate data, if applicable. 
+
+4. Saved cleaned data into a .csv file. 
+
+5. Created table in PostgreSQL
+CREATE TABLE walmart (
+store INTEGER,
+date TIMESTAMP,
+weekly_sales NUMERIC(9,2),
+holiday INTEGER,
+temperature NUMERIC(5,2),
+fuel_price NUMERIC(4,2),
+CPI NUMERIC(10,7),
+unemployment NUMERIC(5,3)
+);
+
+6. Imported .csv file into created table
+
+7. Obtained top 10 weekly sales across all stores
+SELECT * FROM walmart
+ORDER BY weekly_sales DESC
+LIMIT 10
+
+**still working on the analysis, but this is my start so far**
+
